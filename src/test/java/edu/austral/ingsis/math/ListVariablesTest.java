@@ -1,5 +1,7 @@
 package edu.austral.ingsis.math;
 
+import edu.austral.ingsis.math.visitor.ListVariablesVisitor;
+import edu.austral.ingsis.math.visitor.OperationVisitor;
 import org.junit.Test;
 
 import java.util.Collections;
@@ -17,7 +19,12 @@ public class ListVariablesTest {
      */
     @Test
     public void shouldListVariablesFunction1() {
-        final List<String> result = Collections.emptyList();
+        Term term = new Term(new Value(1), new Sum(), new Value(6));
+
+        ListVariablesVisitor listVisitor = new ListVariablesVisitor();
+        term.accept(listVisitor);
+
+        final List<String> result = listVisitor.getVariables();
 
         assertThat(result, empty());
     }
@@ -27,7 +34,12 @@ public class ListVariablesTest {
      */
     @Test
     public void shouldListVariablesFunction2() {
-        final List<String> result = Collections.emptyList();
+        Term term = new Term(new Value(1), new Division(), new Value("div"));
+
+        ListVariablesVisitor listVisitor = new ListVariablesVisitor();
+        term.accept(listVisitor);
+
+        final List<String> result = listVisitor.getVariables();
 
         assertThat(result, containsInAnyOrder("div"));
     }
@@ -37,7 +49,12 @@ public class ListVariablesTest {
      */
     @Test
     public void shouldListVariablesFunction3() {
-        final List<String> result = Collections.emptyList();
+        Term term = new Term(new Value(9), new Division(), new Value("x"));
+        SubTerm subterm = new SubTerm(term, new Times() , new Term(new Value("y")));
+        ListVariablesVisitor listVisitor = new ListVariablesVisitor();
+        subterm.accept(listVisitor);
+
+        final List<String> result = listVisitor.getVariables();
 
         assertThat(result, containsInAnyOrder("x", "y"));
     }
@@ -47,7 +64,12 @@ public class ListVariablesTest {
      */
     @Test
     public void shouldListVariablesFunction4() {
-        final List<String> result = Collections.emptyList();
+        Term term = new Term(new Value(27), new Division(), new Value("a"));
+        SubTerm subterm = new SubTerm(term, new Power() , new Term(new Value("b")));
+        ListVariablesVisitor listVisitor = new ListVariablesVisitor();
+        subterm.accept(listVisitor);
+
+        final List<String> result = listVisitor.getVariables();
 
         assertThat(result, containsInAnyOrder("a", "b"));
     }
@@ -57,7 +79,12 @@ public class ListVariablesTest {
      */
     @Test
     public void shouldListVariablesFunction5() {
-        final List<String> result = Collections.emptyList();
+        Term term = new Term(new Value(1), new Division(), new Value(2));
+        SubTerm subterm = new SubTerm(new Term(new Value("z")), new Power() , term);
+        ListVariablesVisitor listVisitor = new ListVariablesVisitor();
+        subterm.accept(listVisitor);
+
+        final List<String> result = listVisitor.getVariables();
 
         assertThat(result, containsInAnyOrder("z"));
     }
@@ -67,7 +94,12 @@ public class ListVariablesTest {
      */
     @Test
     public void shouldListVariablesFunction6() {
-        final List<String> result = Collections.emptyList();
+        Term term = new Term(new Absolute(), new Value("value"));
+        SubTerm subterm = new SubTerm(term, new Substract() , new Term(new Value(8)));
+        ListVariablesVisitor listVisitor = new ListVariablesVisitor();
+        subterm.accept(listVisitor);
+
+        final List<String> result = listVisitor.getVariables();
 
         assertThat(result, containsInAnyOrder("value"));
     }
@@ -77,7 +109,12 @@ public class ListVariablesTest {
      */
     @Test
     public void shouldListVariablesFunction7() {
-        final List<String> result = Collections.emptyList();
+        Term term = new Term(new Absolute(), new Value("value"));
+        SubTerm subterm = new SubTerm(term, new Substract() , new Term(new Value(8)));
+        ListVariablesVisitor listVisitor = new ListVariablesVisitor();
+        subterm.accept(listVisitor);
+
+        final List<String> result = listVisitor.getVariables();
 
         assertThat(result, containsInAnyOrder("value"));
     }
@@ -87,7 +124,12 @@ public class ListVariablesTest {
      */
     @Test
     public void shouldListVariablesFunction8() {
-        final List<String> result = Collections.emptyList();
+        Term term = new Term(new Value(5),new Substract(), new Value("i"));
+        SubTerm subterm = new SubTerm(term, new Times() , new Term(new Value(8)));
+        ListVariablesVisitor listVisitor = new ListVariablesVisitor();
+        subterm.accept(listVisitor);
+
+        final List<String> result = listVisitor.getVariables();
 
         assertThat(result, containsInAnyOrder("i"));
     }

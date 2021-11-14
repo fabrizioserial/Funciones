@@ -1,5 +1,7 @@
 package edu.austral.ingsis.math;
 
+import edu.austral.ingsis.math.visitor.ListVariablesVisitor;
+import edu.austral.ingsis.math.visitor.OperationVisitor;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -13,7 +15,10 @@ public class ResolutionTest {
      */
     @Test
     public void shouldResolveSimpleFunction1() {
-        final Double result = 7d;
+        Term term = new Term(new Value(1),new Sum(), new Value(6));
+        OperationVisitor operatorVisitor = new OperationVisitor();
+        term.accept(operatorVisitor);
+        final Double result = operatorVisitor.getVisitorValue().getValue();
 
         assertThat(result, equalTo(7d));
     }
@@ -23,7 +28,10 @@ public class ResolutionTest {
      */
     @Test
     public void shouldResolveSimpleFunction2() {
-        final Double result = 6d;
+        Term term = new Term(new Value(12),new Division(), new Value(2));
+        OperationVisitor operatorVisitor = new OperationVisitor();
+        term.accept(operatorVisitor);
+        final Double result = operatorVisitor.getVisitorValue().getValue();
 
         assertThat(result, equalTo(6d));
     }
@@ -33,7 +41,11 @@ public class ResolutionTest {
      */
     @Test
     public void shouldResolveSimpleFunction3() {
-        final Double result = 13.5;
+        Term term = new Term( new Value(9),new Division() ,new Value(2));
+        SubTerm subTerm = new SubTerm(term, new Times(), new Term(new Value(3)));
+        OperationVisitor operatorVisitor = new OperationVisitor();
+        subTerm.accept(operatorVisitor);
+        final Double result = operatorVisitor.getVisitorValue().getValue();
 
         assertThat(result, equalTo(13.5d));
     }
@@ -43,7 +55,11 @@ public class ResolutionTest {
      */
     @Test
     public void shouldResolveSimpleFunction4() {
-        final Double result = 20.25;
+        Term term = new Term( new Value(27),new Division() ,new Value(6));
+        SubTerm subTerm = new SubTerm(term, new Power(), new Term(new Value(2)));
+        OperationVisitor operatorVisitor = new OperationVisitor();
+        subTerm.accept(operatorVisitor);
+        final Double result = operatorVisitor.getVisitorValue().getValue();
 
         assertThat(result, equalTo(20.25d));
     }
@@ -53,7 +69,11 @@ public class ResolutionTest {
      */
     @Test
     public void shouldResolveSimpleFunction5() {
-        final Double result = 6d;
+        Term term = new Term( new Value(1),new Division() ,new Value(2));
+        SubTerm subTerm = new SubTerm(new Term(new Value(36)), new Power(), term);
+        OperationVisitor operatorVisitor = new OperationVisitor();
+        subTerm.accept(operatorVisitor);
+        final Double result = operatorVisitor.getVisitorValue().getValue();
 
         assertThat(result, equalTo(6d));
     }
@@ -63,7 +83,10 @@ public class ResolutionTest {
      */
     @Test
     public void shouldResolveSimpleFunction6() {
-        final Double result = 136d;
+        Term term = new Term( new Absolute(),new Value(136));
+        OperationVisitor operatorVisitor = new OperationVisitor();
+        term.accept(operatorVisitor);
+        final Double result = operatorVisitor.getVisitorValue().getValue();
 
         assertThat(result, equalTo(136d));
     }
@@ -73,7 +96,10 @@ public class ResolutionTest {
      */
     @Test
     public void shouldResolveSimpleFunction7() {
-        final Double result = 136d;
+        Term term = new Term( new Absolute(),new Value(-136));
+        OperationVisitor operatorVisitor = new OperationVisitor();
+        term.accept(operatorVisitor);
+        final Double result = operatorVisitor.getVisitorValue().getValue();
 
         assertThat(result, equalTo(136d));
     }
@@ -83,7 +109,11 @@ public class ResolutionTest {
      */
     @Test
     public void shouldResolveSimpleFunction8() {
-        final Double result = 0d;
+        Term term = new Term( new Value(5),new Substract() ,new Value(5));
+        SubTerm subTerm = new SubTerm(term, new Times(), new Term(new Value(8)));
+        OperationVisitor operatorVisitor = new OperationVisitor();
+        subTerm.accept(operatorVisitor);
+        final Double result = operatorVisitor.getVisitorValue().getValue();
 
         assertThat(result, equalTo(0d));
     }
